@@ -4,6 +4,9 @@
 <br>
 <br>
 <dir class="container">
+  {% if isMyPost %}
+  <a href="{% url 'blogsite:delete_post' post_id=post.id %}" role="button" class="btn btn-danger float-md-right">Удалить пост</a>
+  {% endif %}
   <h1 class="mt-4">{{ post.post_header }}</h1>
   <p class="lead"><a href="{% url 'blogsite:posts' blog_id=blog.id %}">{{blog.blog_name}}</a></p>
   <hr>
