@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models.signals import post_save
 # Create your models here.
 
 class Blog(models.Model):
@@ -19,3 +20,10 @@ class BlogSubscriber(models.Model):
 class UserPostWatched(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
+
+def create_profile(sender, **kwargs):
+    print (kwargs['instance'])
+    if kwargs['created']:
+        blog = Blog.objects.create(user=kwargs['instance'], blog_name='Блог пользователя %s' %(kwargs['instance']))
+
+post_save.connect(create_profile, sender=User)
