@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block body %}
+<br>
+<h1 class="mt-5 text-center">Вход в систему</h1>
+<div class="container text-center">
+
+<form method="post" action="{% url 'signupapp:login' %}">
+  {% csrf_token %}
+  <p>
+    <input type="text" id="username" name="username"  placeholder="Логин">
+  </p>
+  <p>
+    <input type="password" name="password" id="password" placeholder="Пароль">
+  </p>
+  <button type="submit" class="btn btn-dark">Войти</button>
+</form>
+</div>
+{% endblock %}
