@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views import View
 from django.http import HttpResponse
-from blogsite.models import Post, Blog
+from blogsite.models import Post, Blog, BlogSubscriber, UserPostWatched
 from blogsite import forms
 # Create your views here.
 
@@ -59,6 +59,23 @@ class ShowPost(View):
         blog = Blog.objects.get(id=get_blog_id(request.user.id))
         args = {'post': post, 'blog': blog}
         return render(request, 'blogsite/post.html', args)
+
+    def post(self, request):
+        pass
+
+class SignUnsign(View):
+
+    def get(self, request, blog_id):
+        blog_subscriber = BlogSubscriber.objects.filter(user_id=request.user.id, blog_id=blog_id)
+        if blog_subscriber:
+            blog_subscriber.delete()
+            return HttpResponse('Unsigned')
+        else:
+            blog_subscriber = BlogSubscriber()
+            blog_subscriber.blog_id = blog_id
+            blog_subscriber.user_id = request.user.id
+            blog_subscriber.save()
+            return HttpResponse('Signed')
 
     def post(self, request):
         pass
