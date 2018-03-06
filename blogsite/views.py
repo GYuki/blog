@@ -13,9 +13,13 @@ def get_blog_id(user_id):
 class ShowBlogPosts(View):
 
     def get(self, request, blog_id):
+        isSub = False;
         posts = Post.objects.filter(blog_id=blog_id)
         blog = Blog.objects.get(id=blog_id)
-        args = {'posts': posts.values(), 'isMyPost': blog.user_id==request.user.id}
+        blog_subscriber = BlogSubscriber.objects.filter(user_id=request.user.id, blog_id=blog_id)
+        if blog_subscriber:
+            isSub = True
+        args = {'posts': posts.values(), 'blog':blog, 'isMyPost': blog.user_id==request.user.id, 'isSub': isSub}
         return render(request, 'blogsite/posts.html', args)
 
     def post(self, request):
@@ -74,13 +78,14 @@ class SignUnsign(View):
         blog_subscriber = BlogSubscriber.objects.filter(user_id=request.user.id, blog_id=blog_id)
         if blog_subscriber:
             blog_subscriber.delete()
-            return HttpResponse('Unsigned')
+            return redirect(reverse('blogsite:posts', kwargs={'blog_id': blog_id}))
         else:
             blog_subscriber = BlogSubscriber()
             blog_subscriber.blog_id = blog_id
             blog_subscriber.user_id = request.user.id
             blog_subscriber.save()
-            return HttpResponse('Signed')
+            return redirect(reverse('blogsite:posts', kwargs={'blog_id': blog_id}))
+
 
     def post(self, request):
         pass

@@ -6,6 +6,12 @@
 <div class="container">
   {% if isMyPost %}
 <a href="{% url 'blogsite:new_post' %}" role="button" class="btn btn-primary float-md-right">Новый пост</a>
+{% else %}
+{% if isSub%}
+<a href="{% url 'blogsite:sign_unsign' blog_id=blog.id %}" role="button" class="btn btn-primary float-md-right">Отписаться</a>
+{% else %}
+<a href="{% url 'blogsite:sign_unsign' blog_id=blog.id %}" role="button" class="btn btn-primary float-md-right">Подписаться</a>
+{% endif %}
   {% endif %}
 <br>
 <br>
