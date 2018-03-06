@@ -22,13 +22,13 @@ class CustomLoginView(View):
         if user is not None:
             if user.is_active:
                 login(request, user)
-                return HttpResponse("Good")
+                return redirect(reverse('blogsite:feed'))
         return render(request, 'signup/login.html')
 
 class CustomLogoutView(View):
 
     def get(self, request):
-        return redirect(reverse('signupapp:login'))
-    def post(self, request):
         logout(request)
         return redirect(reverse('signupapp:login'))
+    def post(self, request):
+        pass

@@ -4,9 +4,12 @@
 <br>
 <br>
 <br>
+<div class="container">
+
 <form method="post">
   {% csrf_token %}
   {{ form.as_p }}
-  <button type="submit">Ввод</button>
+  <button type="submit" class="btn btn-dark">Ввод</button>
 </form>
+</div>
 {% endblock %}

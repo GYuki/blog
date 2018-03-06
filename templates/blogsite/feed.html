@@ -3,7 +3,10 @@
 <br>
 <br>
 <br>
+<dir class="container">
 {% for p in feed %}
-  <p>{{ p.post_header }}</p>
+  <p><a href="{% url 'blogsite:show_post' post_id=p.id %}">{{ p.post_header }}</a></p>
+  <hr>
 {% endfor %}
+</div>
 {% endblock %}
