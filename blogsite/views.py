@@ -38,3 +38,15 @@ class NewPost(View):
             return HttpResponse('Created')
         else:
             return HttpResponse('Not created!')
+
+class DeletePost(View):
+
+    def get(self, request, post_id):
+        post = Post.objects.filter(id=post_id)
+        if post:
+            post.delete()
+            return HttpResponse('Deleted')
+        return HttpResponse('Not deleted')
+
+    def post(self, request):
+        pass
