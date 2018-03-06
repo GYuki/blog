@@ -94,3 +94,15 @@ class MarkAsRead(View):
 
     def post(self, request):
         pass
+
+class NewsFeed(View):
+
+    def get(self, request):
+        my_subcriptions = BlogSubscriber.objects.filter(user_id=request.user.id)
+        blog_ids = [x['blog_id'] for x in my_subcriptions.values()]
+        my_feed = Post.objects.filter(blog_id__in=blog_ids).values()
+        args = {'feed': my_feed}
+        return render(request, 'blogsite/feed.html', args)
+
+    def post(self, request):
+        pass
