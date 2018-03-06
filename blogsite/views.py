@@ -14,7 +14,8 @@ class ShowBlogPosts(View):
 
     def get(self, request, blog_id):
         posts = Post.objects.filter(blog_id=blog_id)
-        args = {'posts': posts.values()}
+        blog = Blog.objects.get(id=blog_id)
+        args = {'posts': posts.values(), 'isMyPost': blog.user_id==request.user.id}
         return render(request, 'blogsite/posts.html', args)
 
     def post(self, request):

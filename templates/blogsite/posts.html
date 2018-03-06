@@ -4,6 +4,11 @@
 <br>
 <br>
 <div class="container">
+  {% if isMyPost %}
+<a href="{% url 'blogsite:new_post' %}" role="button" class="btn btn-primary float-md-right">Новый пост</a>
+  {% endif %}
+<br>
+<br>
 {% for p in posts %}
 <p><a href="{% url 'blogsite:show_post' post_id=p.id %}">{{ p.post_header }}</a></p>
   <hr>
