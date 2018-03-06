@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block body %}
+<br>
+<br>
+<br>
+{% for p in posts %}
+  <p>{{ p.post_header }}</p>
+{% endfor %}
+{% endblock %}
