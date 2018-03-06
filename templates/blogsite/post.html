@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block body %}
+<br>
+<br>
+<br>
+  <h1>{{ post.post_header }}</h1>
+  <p><a href="{% url 'blogsite:posts' blog_id=blog.id %}">{{blog.blog_name}}</a></p>
+  <p>Дата публикации {{ post.created_at }}</p>
+  <p>{{post.post_text}}</p>
+{% endblock %}

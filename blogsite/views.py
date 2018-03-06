@@ -5,6 +5,10 @@ from blogsite.models import Post, Blog
 from blogsite import forms
 # Create your views here.
 
+def get_blog_id(user_id):
+    blog = Blog.objects.get(user_id=user_id)
+    return blog.id
+
 class ShowBlogPosts(View):
 
     def get(self, request, blog_id):
@@ -23,17 +27,13 @@ class NewPost(View):
         return render(request, 'blogsite/new_post.html', args)
 
 
-    def get_blog_id(self, user_id):
-        blog = Blog.objects.get(user_id=user_id)
-        return blog.id
-
     def post(self, request):
         form = forms.NewPostForm(request.POST)
         if form.is_valid():
             post = Post()
             post.post_header = form['post_header'].value()
             post.post_text = form['post_text'].value()
-            post.blog_id = self.get_blog_id(request.user.id)
+            post.blog_id = get_blog_id(request.user.id)
             post.save()
             return HttpResponse('Created')
         else:
@@ -47,6 +47,18 @@ class DeletePost(View):
             post.delete()
             return HttpResponse('Deleted')
         return HttpResponse('Not deleted')
+
+    def post(self, request):
+        pass
+
+class ShowPost(View):
+
+    def get(self, request, post_id):
+        post = Post.objects.get(id=post_id)
+        post.created_at = post.created_at.strftime("%d.%m.%Y %H:%M")
+        blog = Blog.objects.get(id=get_blog_id(request.user.id))
+        args = {'post': post, 'blog': blog}
+        return render(request, 'blogsite/post.html', args)
 
     def post(self, request):
         pass
