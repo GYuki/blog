@@ -3,22 +3,32 @@ from django.contrib.auth.models import User
 from django.contrib.auth import  authenticate, login, logout
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse
+from django.views import View
 
-def custom_login(request):
-    logout(request)
-    username = password = ''
-    if request.POST:
-        username = request.POST['username']
-        password = request.POST['password']
+class CustomLoginView(View):
+    def __init__(self):
+        self.username = self.password = ''
 
-        user = authenticate(username=username, password=password)
+
+    def get(self, request):
+        return render(request, 'signup/login.html')
+
+    def post(self, request):
+        logout(request)
+        self.username = request.POST['username']
+        self.password = request.POST['password']
+
+        user = authenticate(username=self.username, password=self.password)
         if user is not None:
             if user.is_active:
                 login(request, user)
                 return HttpResponse("Good")
+        return render(request, 'signup/login.html')
 
-    return render(request, 'signup/login.html')
+class CustomLogoutView(View):
 
-def custom_logout(request):
-    logout(request)
-    return redirect(reverse('signupapp:login'))
+    def get(self, request):
+        return redirect(reverse('signupapp:login'))
+    def post(self, request):
+        logout(request)
+        return redirect(reverse('signupapp:login'))
