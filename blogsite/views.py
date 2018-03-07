@@ -67,6 +67,9 @@ class ShowPost(View):
         post = Post.objects.get(id=post_id)
         post.created_at = post.created_at.strftime("%d.%m.%Y %H:%M")
         blog = Blog.objects.get(id=post.blog_id)
+        watch_info = UserPostWatched.objects.get(user_id=request.user.id, post_id = post.id)
+        watch_info.seen = True
+        watch_info.save()
         args = {'post': post, 'blog': blog, 'isMyPost': request.user.id==blog.user_id}
         return render(request, 'blogsite/post.html', args)
 
