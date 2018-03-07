@@ -20,6 +20,7 @@ class BlogSubscriber(models.Model):
 class UserPostWatched(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    seen = models.BooleanField(default=False)
 
 def create_profile(sender, **kwargs):
     if kwargs['created']:
