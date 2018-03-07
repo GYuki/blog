@@ -7,11 +7,17 @@ class Blog(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     blog_name = models.CharField(max_length=100)
 
+    def __str__(self):
+        return self.blog_name
+
 class Post(models.Model):
     post_header = models.CharField(max_length=100, null=False)
     post_text = models.TextField(null=False)
     blog = models.ForeignKey(Blog, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.post_header
 
 class BlogSubscriber(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
