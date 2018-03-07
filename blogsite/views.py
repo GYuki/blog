@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect
 from django.core.urlresolvers import reverse
 from django.views import View
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from blogsite.models import Post, Blog, BlogSubscriber, UserPostWatched
 from blogsite import forms
+import json
 # Create your views here.
 
 def get_blog_id(user_id):
@@ -90,10 +91,15 @@ class SignUnsign(View):
     def post(self, request):
         pass
 
-class MarkAsRead(View):
+class GetFreshPosts(View):
 
-    def get(self, request, post_id):
-        pass
+    def get(self, request):
+        resp = {}
+        marks = UserPostWatched.objects.filter(user_id=request.user.id)
+        if marks:
+            posts_list = [x for x in marks.values()]
+            resp = {'posts': posts_list, 'len': len(posts_list)}
+        return JsonResponse(resp)
 
     def post(self, request):
         pass

@@ -7,6 +7,6 @@ urlpatterns = [
     url(r'^delete_post/(?P<post_id>\d+)$', views.DeletePost.as_view(), name='delete_post'),
     url(r'^post/(?P<post_id>\d+)$', views.ShowPost.as_view(), name='show_post'),
     url(r'^sign_unsign/(?P<blog_id>\d+)$', views.SignUnsign.as_view(), name='sign_unsign'),
-    url(r'^mark/(?P<post_id>\d+)$', views.MarkAsRead.as_view(), name='mark'),
+    url(r'^fresh_posts/$', views.GetFreshPosts.as_view(), name='fresh_posts'),
     url(r'^feed/$', views.NewsFeed.as_view(), name='feed'),
 ]
