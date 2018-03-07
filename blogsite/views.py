@@ -4,7 +4,6 @@ from django.views import View
 from django.http import HttpResponse, JsonResponse
 from blogsite.models import Post, Blog, BlogSubscriber, UserPostWatched
 from blogsite import forms
-import json
 # Create your views here.
 
 def get_blog_id(user_id):
@@ -15,7 +14,7 @@ class ShowBlogPosts(View):
 
     def get(self, request, blog_id):
         isSub = False;
-        posts = Post.objects.filter(blog_id=blog_id)
+        posts = Post.objects.filter(blog_id=blog_id).order_by('-created_at')
         blog = Blog.objects.get(id=blog_id)
         blog_subscriber = BlogSubscriber.objects.filter(user_id=request.user.id, blog_id=blog_id)
         if blog_subscriber:
@@ -67,9 +66,10 @@ class ShowPost(View):
         post = Post.objects.get(id=post_id)
         post.created_at = post.created_at.strftime("%d.%m.%Y %H:%M")
         blog = Blog.objects.get(id=post.blog_id)
-        watch_info = UserPostWatched.objects.get(user_id=request.user.id, post_id = post.id)
-        watch_info.seen = True
-        watch_info.save()
+        watch_info = UserPostWatched.objects.filter(user_id=request.user.id, post_id = post.id)
+        if watch_info:
+            watch_info.values()[0]['seen'] = True
+            watch_info.update()
         args = {'post': post, 'blog': blog, 'isMyPost': request.user.id==blog.user_id}
         return render(request, 'blogsite/post.html', args)
 
@@ -97,7 +97,6 @@ class SignUnsign(View):
 class GetFreshPosts(View):
 
     def get(self, request):
-        print ('Im here')
         resp = {}
         marks = UserPostWatched.objects.filter(user_id=request.user.id, seen=False)
         if marks:

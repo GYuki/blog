@@ -6,7 +6,6 @@ app.controller('BaseController', function($scope, $http) {
     url: "/blogs/fresh_posts/",
     method: "GET"
   }).then(function (response) {
-    console.log('heh');
     $scope.notification = response.data.len
   })
 }
