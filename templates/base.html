@@ -29,6 +29,7 @@
           {% if user.is_authenticated %}
           <ul class="navbar-nav ml-auto">
             <li class="nav-item active"><a class="nav-link" href="/">Уведомления <span ng-bind="notification"></span></a></li>
+            <li class="nav-item active"><a class="nav-link" href="{% url 'blogsite:feed' %}">Новостная лента</a></li>
             <li class="nav-item active"><a class="nav-link" href="{% url 'signupapp:logout' %}">Выйти</a></li>
           </ul>
           {% endif %}
