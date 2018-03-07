@@ -6,7 +6,7 @@
 <br>
 <div class="container">
 
-<form method="post">
+<form method="post" action="{% url 'blogsite:new_post' %}">
   {% csrf_token %}
   {{ form.as_p }}
   <button type="submit" class="btn btn-dark">Ввод</button>

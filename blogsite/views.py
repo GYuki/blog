@@ -94,8 +94,9 @@ class SignUnsign(View):
 class GetFreshPosts(View):
 
     def get(self, request):
+        print ('Im here')
         resp = {}
-        marks = UserPostWatched.objects.filter(user_id=request.user.id)
+        marks = UserPostWatched.objects.filter(user_id=request.user.id, seen=False)
         if marks:
             posts_list = [x for x in marks.values()]
             resp = {'posts': posts_list, 'len': len(posts_list)}
