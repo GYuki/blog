@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block body %}
+<br>
+<br>
+<br>
+<dir class="container">
+{% for p in feed %}
+  <p><a href="{% url 'blogsite:show_post' post_id=p.id %}">{{ p.post_header }}</a></p>
+
+  <hr>
+{% endfor %}
+</div>
+{% endblock %}

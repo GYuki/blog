@@ -141,3 +141,13 @@ class MarkAsWatched(View):
 
     def post(self, request):
         pass
+
+class ShowAllPosts(View):
+
+    def get(self, request):
+        post = Post.objects.all().order_by('-created_at')
+        args = {'feed': post.values()}
+        return render(request, 'blogsite/all_posts.html', args)
+
+    def post(self, request):
+        pass
