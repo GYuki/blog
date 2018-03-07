@@ -28,7 +28,7 @@ class ShowBlogPosts(View):
             if blog_subscriber:
                 isSub = True
             args = {'posts': posts.values(), 'blog':blog.values()[0], 'isMyPost': blog.values()[0]['user_id']==request.user.id, 'isSub': isSub}
-            print ('BLOG INFO ------------------------ ', args['blog'])
+            
             return render(request, 'blogsite/posts.html', args)
         return redirect(reverse('blogsite:feed'))
 
