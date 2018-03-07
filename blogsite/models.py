@@ -25,6 +25,7 @@ class UserPostWatched(models.Model):
 def create_profile(sender, **kwargs):
     if kwargs['created']:
         blog = Blog.objects.create(user=kwargs['instance'], blog_name='Блог пользователя %s' %(kwargs['instance']))
+        subs = BlogSubscriber.objects.create(user=kwargs['instance'], blog_id=blog.id)
 
 def create_post(sender, **kwargs):
     if kwargs['created']:
