@@ -41,7 +41,8 @@ class NewPost(View):
             post.post_text = form['post_text'].value()
             post.blog_id = get_blog_id(request.user.id)
             post.save()
-            return redirect(reverse('blogsite:posts', kwargs={'blog_id': post.blog_id}))
+            print (post.id)
+            return redirect(reverse('blogsite:show_post', kwargs={'post_id': post.id}))
         else:
             return HttpResponse('Not created!')
 
@@ -66,10 +67,9 @@ class ShowPost(View):
         post = Post.objects.get(id=post_id)
         post.created_at = post.created_at.strftime("%d.%m.%Y %H:%M")
         blog = Blog.objects.get(id=post.blog_id)
-        watch_info = UserPostWatched.objects.filter(user_id=request.user.id, post_id = post.id)
+        watch_info = UserPostWatched.objects.filter(user_id=request.user.id, post_id = post.id, seen=False)
         if watch_info:
-            watch_info.values()[0]['seen'] = True
-            watch_info.update()
+            watch_info.update(seen=True)
         args = {'post': post, 'blog': blog, 'isMyPost': request.user.id==blog.user_id}
         return render(request, 'blogsite/post.html', args)
 
@@ -113,7 +113,8 @@ class NewsFeed(View):
         my_subcriptions = BlogSubscriber.objects.filter(user_id=request.user.id)
         blog_ids = [x['blog_id'] for x in my_subcriptions.values()]
         my_feed = Post.objects.filter(blog_id__in=blog_ids).order_by('-created_at').values()
-        args = {'feed': my_feed}
+        watch_info = UserPostWatched.objects.filter(post_id__in=[x['id'] for x in my_feed], user_id=request.user.id, seen=False).values()
+        args = {'feed': my_feed, 'watches': [x['post_id'] for x in watch_info]}
         return render(request, 'blogsite/feed.html', args)
 
     def post(self, request):
@@ -126,6 +127,17 @@ class FreshPostsPage(View):
         posts_list = Post.objects.filter(id__in=[x['post_id'] for x in fresh_posts.values()]).order_by('-created_at')
         args = {'notify': posts_list}
         return render(request, 'blogsite/notifications.html', args)
+
+    def post(self, request):
+        pass
+
+class MarkAsWatched(View):
+
+    def get(self, request, post_id):
+        mark = UserPostWatched.objects.filter(post_id=post_id, user_id=request.user.id, seen=False)
+        if mark:
+            mark.update(seen=True)
+        return redirect(reverse('blogsite:feed'))
 
     def post(self, request):
         pass

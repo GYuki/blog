@@ -10,4 +10,5 @@ urlpatterns = [
     url(r'^fresh_posts/$', views.GetFreshPosts.as_view(), name='fresh_posts'),
     url(r'^feed/$', views.NewsFeed.as_view(), name='feed'),
     url(r'^notify/$', views.FreshPostsPage.as_view(), name='notify'),
+    url(r'^mark_watched/(?P<post_id>\d+)$', views.MarkAsWatched.as_view(), name='mark_watched'),
 ]
