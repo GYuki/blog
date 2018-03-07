@@ -22,12 +22,16 @@ class ShowBlogPosts(View):
     def get(self, request, blog_id):
         isSub = False;
         posts = Post.objects.filter(blog_id=blog_id).order_by('-created_at')
-        blog = Blog.objects.get(id=blog_id)
-        blog_subscriber = BlogSubscriber.objects.filter(user_id=request.user.id, blog_id=blog_id)
-        if blog_subscriber:
-            isSub = True
-        args = {'posts': posts.values(), 'blog':blog, 'isMyPost': blog.user_id==request.user.id, 'isSub': isSub}
-        return render(request, 'blogsite/posts.html', args)
+        blog = Blog.objects.filter(id=blog_id)
+        if blog:
+            blog_subscriber = BlogSubscriber.objects.filter(user_id=request.user.id, blog_id=blog_id)
+            if blog_subscriber:
+                isSub = True
+            args = {'posts': posts.values(), 'blog':blog.values()[0], 'isMyPost': blog.values()[0]['user_id']==request.user.id, 'isSub': isSub}
+            print ('BLOG INFO ------------------------ ', args['blog'])
+            return render(request, 'blogsite/posts.html', args)
+        return redirect(reverse('blogsite:feed'))
+
 
     def post(self, request):
         pass
@@ -48,7 +52,6 @@ class NewPost(View):
             post.post_text = form['post_text'].value()
             post.blog_id = get_blog_id(request.user.id)
             post.save()
-            print (post.id)
             return redirect(reverse('blogsite:show_post', kwargs={'post_id': post.id}))
         else:
             return HttpResponse('Not created!')
