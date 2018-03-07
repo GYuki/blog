@@ -9,4 +9,5 @@ urlpatterns = [
     url(r'^sign_unsign/(?P<blog_id>\d+)$', views.SignUnsign.as_view(), name='sign_unsign'),
     url(r'^fresh_posts/$', views.GetFreshPosts.as_view(), name='fresh_posts'),
     url(r'^feed/$', views.NewsFeed.as_view(), name='feed'),
+    url(r'^notify/$', views.FreshPostsPage.as_view(), name='notify'),
 ]

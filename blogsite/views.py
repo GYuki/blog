@@ -110,9 +110,20 @@ class NewsFeed(View):
     def get(self, request):
         my_subcriptions = BlogSubscriber.objects.filter(user_id=request.user.id)
         blog_ids = [x['blog_id'] for x in my_subcriptions.values()]
-        my_feed = Post.objects.filter(blog_id__in=blog_ids).values()
+        my_feed = Post.objects.filter(blog_id__in=blog_ids).order_by('-created_at').values()
         args = {'feed': my_feed}
         return render(request, 'blogsite/feed.html', args)
+
+    def post(self, request):
+        pass
+
+class FreshPostsPage(View):
+
+    def get(self, request):
+        fresh_posts = UserPostWatched.objects.filter(user_id=request.user.id, seen=False)
+        posts_list = Post.objects.filter(id__in=[x['post_id'] for x in fresh_posts.values()]).order_by('-created_at')
+        args = {'notify': posts_list}
+        return render(request, 'blogsite/notifications.html', args)
 
     def post(self, request):
         pass
