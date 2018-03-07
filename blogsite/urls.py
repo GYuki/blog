@@ -2,6 +2,7 @@ from django.conf.urls import url
 from . import views
 
 urlpatterns = [
+    url(r'^$', views.Redirect.as_view(), name="redirect"),
     url(r'^posts/(?P<blog_id>\d+)$', views.ShowBlogPosts.as_view(), name='posts'),
     url(r'^all_feed/$', views.ShowAllPosts.as_view(), name='all_posts'),
     url(r'^new_post/$', views.NewPost.as_view(), name='new_post'),

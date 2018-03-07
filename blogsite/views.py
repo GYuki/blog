@@ -10,6 +10,13 @@ def get_blog_id(user_id):
     blog = Blog.objects.get(user_id=user_id)
     return blog.id
 
+class Redirect(View):
+
+    def get(self, request):
+        if request.user.is_authenticated():
+            return redirect(reverse('blogsite:feed'))
+        return redirect(reverse('signupapp:login'))
+
 class ShowBlogPosts(View):
 
     def get(self, request, blog_id):
