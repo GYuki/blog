@@ -28,6 +28,7 @@
         <div class="collapse navbar-collapse" id="navbarResponsive">
           {% if user.is_authenticated %}
           <ul class="navbar-nav ml-auto">
+            <li class="nav-item active"><a class="nav-link" href="{% url 'blogsite:posts' blog_id=blog_ids %}">Мой блог<span ng-bind="notification"></span></a></li>
             <li class="nav-item active"><a class="nav-link" href="{% url 'blogsite:notify' %}">Уведомления <span ng-bind="notification"></span></a></li>
             <li class="nav-item active"><a class="nav-link" href="{% url 'blogsite:all_posts' %}">Все посты</a></li>
             <li class="nav-item active"><a class="nav-link" href="{% url 'blogsite:feed' %}">Новостная лента</a></li>
