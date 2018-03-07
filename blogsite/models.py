@@ -22,8 +22,15 @@ class UserPostWatched(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
 
 def create_profile(sender, **kwargs):
-    print (kwargs['instance'])
     if kwargs['created']:
         blog = Blog.objects.create(user=kwargs['instance'], blog_name='Блог пользователя %s' %(kwargs['instance']))
 
+def create_post(sender, **kwargs):
+    if kwargs['created']:
+        subs = BlogSubscriber.objects.filter(blog_id=kwargs['instance'].blog_id).values()
+        sub_list = [x['user_id'] for x in subs]
+        for sub in sub_list:
+            mark = UserPostWatched.objects.create(user_id=sub, post_id=kwargs['instance'].id)
+
 post_save.connect(create_profile, sender=User)
+post_save.connect(create_post, sender=Post)

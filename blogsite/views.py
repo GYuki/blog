@@ -93,14 +93,7 @@ class SignUnsign(View):
 class MarkAsRead(View):
 
     def get(self, request, post_id):
-        mark, created = UserPostWatched.objects.get_or_create(
-            user_id = request.user.id,
-            post_id = post_id
-        )
-        if created:
-            return HttpResponse('Marked')
-        else:
-            return HttpResponse('Already marked')
+        pass
 
     def post(self, request):
         pass
